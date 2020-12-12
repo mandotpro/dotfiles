@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Taken from https://stackoverflow.com/a/246128
+SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DOT_FILES_ROOT=$SCRIPTPATH"/..";
+
+cd $DOT_FILES_ROOT
+
+# ~/.gitignore
+echo "Replace ~/.gitignore with symlink."
+rm -f ~/.gitignore
+ln -s $DOT_FILES_ROOT/symlink/.gitignore $HOME/.gitignore
+
+# ~/.gitattributes
+echo "Replace ~/.gitattributes with symlink."
+rm -f ~/.gitattributes
+ln -s $DOT_FILES_ROOT/symlink/.gitattributes $HOME/.gitattributes
+
+# ~/.gitconfig
+echo "Replace ~/.gitconfig with symlink."
+rm -f ~/.gitconfig
+ln -s $DOT_FILES_ROOT/symlink/.gitconfig $HOME/.gitconfig

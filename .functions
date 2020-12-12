@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+function ssh-docker() {
+   docker exec -it "$@" bash
+}
+
+function silent() {
+   "$@" >& /dev/null
+}

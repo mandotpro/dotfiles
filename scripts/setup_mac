@@ -1,0 +1,15 @@
+#!/bin/bash
+
+
+brew install jq
+brew install bash
+brew install htop
+brew install wget
+brew install goto
+brew install tree
+brew install coreutils
+brew install moreutils
+
+
+brew tap homebrew/cask
+brew tap homebrew/cask-versions

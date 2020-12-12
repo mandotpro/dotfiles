@@ -1,0 +1,9 @@
+.editorconfig
+.gitignore
+.git
+.DS_Store
+README.md
+scripts/
+private/
+rsync-skip.txt
+symlink/

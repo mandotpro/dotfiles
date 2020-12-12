@@ -1,0 +1,4 @@
+testing/
+private/
+!private/.gitkeep
+!private/ssh/.gitkeep

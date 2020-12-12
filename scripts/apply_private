@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Taken from https://stackoverflow.com/a/246128
+SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+DOT_FILES_ROOT="$(realpath $SCRIPTPATH/..)"
+DOT_FILES_ROOT_PRIVATE="$DOT_FILES_ROOT/private"
+
+cd $DOT_FILES_ROOT
+
+# ~/.config/goto
+echo "Replace ~/.config/goto with symlink."
+rm -f ~/.config/goto
+ln -sv $DOT_FILES_ROOT_PRIVATE/goto $HOME/.config/goto
+
+# Link ssh folder
+SSH_DIR="$HOME/.ssh":
+echo "Symlink $SSH_DIR"
+if [[ -d $SSH_DIR ]]; then
+    echo "~/.ssh exists.. will be move it."
+    mv -f "$SSH_DIR" "$HOME/.ssh-back-$(date +%Y-%m-%d-%H:%M:%S)";
+fi
+
+if [[ -L $SSH_DIR ]]; then
+    echo "~/.ssh is symlink.. will be removed."
+    rm -f "$SSH_DIR";
+fi
+
+ln -sv "$DOT_FILES_ROOT_PRIVATE/ssh/" $HOME/.ssh
