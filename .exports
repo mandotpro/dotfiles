@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Add local bin to path
+export PATH=/usr/local/bin:$PATH
+
 # Make nano the default editor.
 export EDITOR='nano'
 

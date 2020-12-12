@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+brew install git
 brew install jq
 brew install bash
 brew install htop
