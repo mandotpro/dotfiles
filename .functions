@@ -7,3 +7,7 @@ function ssh-docker() {
 function silent() {
    "$@" >& /dev/null
 }
+
+function display_notification() {
+   osascript -e "display notification \"$3\" with title \"$1\" subtitle \"$2\""
+}

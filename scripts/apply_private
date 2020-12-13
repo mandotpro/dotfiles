@@ -7,22 +7,55 @@ DOT_FILES_ROOT_PRIVATE="$DOT_FILES_ROOT/private"
 
 cd $DOT_FILES_ROOT
 
-# ~/.config/goto
-echo "Replace ~/.config/goto with symlink."
-rm -f ~/.config/goto
-ln -sv $DOT_FILES_ROOT_PRIVATE/goto $HOME/.config/goto
-
-# Link ssh folder
-SSH_DIR="$HOME/.ssh":
-echo "Symlink $SSH_DIR"
-if [[ -d $SSH_DIR ]]; then
-    echo "~/.ssh exists.. will be move it."
-    mv -f "$SSH_DIR" "$HOME/.ssh-back-$(date +%Y-%m-%d-%H:%M:%S)";
+# Replace goto if exists in private dir.
+GOTO_CONFIG_PRIVATE_PATH="$DOT_FILES_ROOT_PRIVATE/goto"
+if [[ -f $GOTO_CONFIG_PRIVATE_PATH ]]; then
+    echo "Replace ~/.config/goto with symlink."
+    rm -f ~/.config/goto
+    ln -sv $GOTO_CONFIG_PRIVATE_PATH $HOME/.config/goto
 fi
 
-if [[ -L $SSH_DIR ]]; then
-    echo "~/.ssh is symlink.. will be removed."
-    rm -f "$SSH_DIR";
+# Symlink ssh folder if exists in private dir.
+SSH_CONFIG_PRIVATE_PATH="$DOT_FILES_ROOT_PRIVATE/ssh/"
+if [[ -d $SSH_CONFIG_PRIVATE_PATH ]]; then
+    SSH_HOME_ORIGIN_PATH="$HOME/.ssh"
+    echo -e "Symlink $SSH_HOME_ORIGIN_PATH"
+    # If exists but is link, remove it
+    if [[ -L $SSH_HOME_ORIGIN_PATH ]]; then
+        echo -e "~/.ssh is symlink.. will be removed."
+        rm -f "$SSH_HOME_ORIGIN_PATH";
+    fi
+
+    if [[ -d $SSH_HOME_ORIGIN_PATH ]]; then
+        echo -e "~/.ssh exists.. will be backuped"
+        mv -f "$SSH_HOME_ORIGIN_PATH" "$HOME/.ssh-back-$(date +%Y-%m-%d-%H:%M:%S)";
+    fi
+
+    # Symlink whole folder to ~/.ssh
+    ln -sv "$SSH_CONFIG_PRIVATE_PATH" "$SSH_HOME_ORIGIN_PATH"
+
+    # There is starnge bug which is making alias inside ssh to ssh itself.. so remove it if exists.
+    rm -f "$SSH_CONFIG_PRIVATE_PATH/ssh"
 fi
 
-ln -sv "$DOT_FILES_ROOT_PRIVATE/ssh/" $HOME/.ssh
+# Rclone configs apply, if configuration exists in private dir.
+RCLONE_ORIGIN_PATH="$HOME/.config/rclone/rclone.conf"
+RCLONE_CONFIG_PRIVATE_PATH="$DOT_FILES_ROOT_PRIVATE/rclone/rclone.conf"
+if [[ -f $RCLONE_CONFIG_PRIVATE_PATH ]]; then
+    # ~/.config/rclone/rclone.conf
+    echo -e "Replace $RCLONE_ORIGIN_PATH with symlink."
+    rm -f $RCLONE_ORIGIN_PATH
+    ln -sv $RCLONE_CONFIG_PRIVATE_PATH $RCLONE_ORIGIN_PATH
+fi
+
+# Apply private aliases & exports if are found in private dir.
+for FILE in $DOT_FILES_ROOT_PRIVATE/.{private_exports,private_aliases}; do
+    ONLY_FILE=$(basename $FILE)
+    if [[ -f $FILE ]]; then
+        echo "Replace ~/$ONLY_FILE with symlink to $FILE"
+        rm -f "$HOME/$ONLY_FILE"
+        ln -sv $FILE "$HOME/$ONLY_FILE"
+    fi
+done;
+unset FILE;
+unset ONLY_FILE;
