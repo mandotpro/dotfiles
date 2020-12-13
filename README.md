@@ -18,7 +18,7 @@ Directory structure overview for scripts and private folder.
 │       └── known_hosts
 ├── rsync-skip.txt
 ├── scripts
-│   ├── apply_private           - Script that applying everything from private folder to proper location.
+│   ├── apply_private           - Script that applying private folder to proper location.
 │   ├── apply_symlinks          - Script that applying all symlinks from symlink/
 │   ├── set_defaults_macos      - Script that sets some default for MacOS
 │   ├── setup_mac               - Script that will install some software for MacOS
